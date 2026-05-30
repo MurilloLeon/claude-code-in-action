@@ -200,79 +200,56 @@ The component is now ready to use. You can see the preview on the right side of 
         return `import React, { useState } from 'react';
 
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission here
+    setSubmitted(true);
   };
 
+  if (submitted) {
+    return (
+      <div className="max-w-lg w-full p-10 bg-zinc-900 rounded-2xl ring-1 ring-white/5 shadow-2xl flex flex-col items-center gap-4">
+        <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+          <span className="text-emerald-400 text-xl">✓</span>
+        </div>
+        <h3 className="text-xl font-bold text-white">Message sent!</h3>
+        <p className="text-zinc-400 text-sm text-center">We'll get back to you within 24 hours.</p>
+        <button onClick={() => setSubmitted(false)} className="text-sm text-violet-400 hover:text-violet-300 transition-colors mt-2">
+          Send another →
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Contact Us</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+    <div className="max-w-lg w-full p-10 bg-zinc-900 rounded-2xl ring-1 ring-white/5 shadow-2xl">
+      <h2 className="text-3xl font-black tracking-tight text-white mb-1">Get in touch</h2>
+      <p className="text-zinc-500 text-sm mb-8">We'll get back to you within 24 hours.</p>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">Name</label>
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Jane Smith"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm" />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">Email</label>
+            <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="jane@example.com"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm" />
+          </div>
         </div>
-        
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">Message</label>
+          <textarea name="message" value={formData.message} onChange={handleChange} required rows={4} placeholder="Tell us what's on your mind..."
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all resize-none text-sm" />
         </div>
-        
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-            Message
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            required
-            rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Send Message
+        <button type="submit"
+          className="w-full py-3 bg-violet-600 text-white font-semibold rounded-xl hover:bg-violet-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-150 shadow-lg shadow-violet-900/40 text-sm">
+          Send message →
         </button>
       </form>
     </div>
@@ -284,29 +261,25 @@ export default ContactForm;`;
       case "card":
         return `import React from 'react';
 
-const Card = ({ 
-  title = "Welcome to Our Service", 
-  description = "Discover amazing features and capabilities that will transform your experience.",
+const Card = ({
+  title = "Ship faster than ever",
+  description = "A modern toolkit built for teams who care about craft. Build, iterate, and launch — without compromise.",
   imageUrl,
-  actions 
+  actions
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      {imageUrl && (
-        <img 
-          src={imageUrl} 
-          alt={title}
-          className="w-full h-48 object-cover"
-        />
-      )}
-      <div className="p-6">
-        <h3 className="text-xl font-semibold mb-2">{title}</h3>
-        <p className="text-gray-600 mb-4">{description}</p>
-        {actions && (
-          <div className="mt-4">
-            {actions}
-          </div>
+    <div className="relative overflow-hidden rounded-2xl p-px bg-gradient-to-br from-violet-500 to-indigo-700 shadow-2xl shadow-indigo-950/60">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 p-8">
+        {imageUrl && (
+          <img src={imageUrl} alt={title} className="w-full h-44 object-cover rounded-xl mb-6 opacity-80" />
         )}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/25 mb-5">
+          <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+          <span className="text-xs font-semibold text-violet-300 tracking-wide uppercase">New</span>
+        </div>
+        <h3 className="text-2xl font-black tracking-tight text-white mb-3 leading-tight">{title}</h3>
+        <p className="text-slate-400 leading-relaxed text-sm mb-6">{description}</p>
+        {actions && <div>{actions}</div>}
       </div>
     </div>
   );
@@ -320,40 +293,28 @@ export default Card;`;
 const Counter = () => {
   const [count, setCount] = useState(0);
 
-  const increment = () => {
-    setCount(count + 1);
-  };
-
-  const decrement = () => {
-    setCount(count - 1);
-  };
-
-  const reset = () => {
-    setCount(0);
-  };
-
   return (
-    <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Counter</h2>
-      <div className="text-4xl font-bold mb-6">{count}</div>
-      <div className="flex gap-4">
-        <button 
-          onClick={decrement}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+    <div className="flex flex-col items-center gap-8 p-12 bg-zinc-900 rounded-2xl ring-1 ring-white/5 shadow-2xl">
+      <p className="text-xs font-semibold tracking-[0.2em] text-zinc-500 uppercase">Counter</p>
+      <div className="text-8xl font-black tracking-tight text-white tabular-nums">{count}</div>
+      <div className="flex gap-3">
+        <button
+          onClick={() => setCount(c => c - 1)}
+          className="w-12 h-12 flex items-center justify-center bg-zinc-800 text-zinc-300 rounded-xl font-bold text-lg hover:bg-zinc-700 hover:-translate-y-0.5 active:scale-95 transition-all duration-150 border border-zinc-700"
         >
-          Decrease
+          −
         </button>
-        <button 
-          onClick={reset}
-          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+        <button
+          onClick={() => setCount(0)}
+          className="px-5 h-12 bg-zinc-800 text-zinc-500 rounded-xl font-semibold text-sm hover:bg-zinc-700 active:scale-95 transition-all duration-150 border border-zinc-700"
         >
           Reset
         </button>
-        <button 
-          onClick={increment}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+        <button
+          onClick={() => setCount(c => c + 1)}
+          className="w-12 h-12 flex items-center justify-center bg-violet-600 text-white rounded-xl font-bold text-lg hover:bg-violet-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-150 shadow-lg shadow-violet-900/50"
         >
-          Increase
+          +
         </button>
       </div>
     </div>
@@ -367,22 +328,22 @@ export default Counter;`;
   private getOldStringForReplace(componentType: string): string {
     switch (componentType) {
       case "form":
-        return "    console.log('Form submitted:', formData);";
+        return '          className="w-full py-3 bg-violet-600 text-white font-semibold rounded-xl hover:bg-violet-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-150 shadow-lg shadow-violet-900/40 text-sm">';
       case "card":
-        return '      <div className="p-6">';
+        return '          <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />';
       default:
-        return "  const increment = () => setCount(count + 1);";
+        return '      <div className="text-8xl font-black tracking-tight text-white tabular-nums">{count}</div>';
     }
   }
 
   private getNewStringForReplace(componentType: string): string {
     switch (componentType) {
       case "form":
-        return "    console.log('Form submitted:', formData);\n    alert('Thank you! We\\'ll get back to you soon.');";
+        return '          className="w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-150 shadow-lg shadow-violet-900/40 text-sm">';
       case "card":
-        return '      <div className="p-6 hover:bg-gray-50 transition-colors">';
+        return '          <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />';
       default:
-        return "  const increment = () => setCount(prev => prev + 1);";
+        return '      <div className="text-8xl font-black tracking-tight text-violet-100 drop-shadow-[0_0_40px_rgba(139,92,246,0.35)] tabular-nums">{count}</div>';
     }
   }
 
@@ -392,14 +353,14 @@ export default Counter;`;
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-8">
-      <div className="w-full max-w-md">
-        <Card 
-          title="Amazing Product"
-          description="This is a fantastic product that will change your life. Experience the difference today!"
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-8">
+      <div className="w-full max-w-sm">
+        <Card
+          title="Ship faster than ever"
+          description="A modern toolkit built for teams who care about craft. Build, iterate, and launch — without compromise."
           actions={
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
-              Learn More
+            <button className="px-5 py-2.5 bg-violet-600 text-white text-sm font-semibold rounded-xl hover:bg-violet-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-150 shadow-lg shadow-violet-900/40">
+              Get started →
             </button>
           }
         />
@@ -413,10 +374,8 @@ export default function App() {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-8">
-      <div className="w-full max-w-md">
-        <${componentName} />
-      </div>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-8">
+      <${componentName} />
     </div>
   );
 }`;
